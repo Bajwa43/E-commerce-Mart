@@ -1,4 +1,5 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
 
 class TSizes {
   TSizes._();
@@ -50,66 +51,157 @@ class TSizes {
 
   // CHECKOUT
   static double checkOutContainerH = 48.h;
+}
 
-  // Padding and margin sizes
-//   static const double xs = 4.0;
-//   static const double sm = 8.0;
-//   static const double md = 16.0;
-//   static const double lg = 24.0;
-//   static const double xl = 32.0;
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:todo_app/data/Constants/colors.dart';
 
-// // Icon sizes
-//   static const double iconXs = 12.0;
-//   static const double iconSm = 16.0;
+class KAppTypoGraphy {
+  static final onBoadingTitleSize = 32.w;
+  static final onBoadingDescriptionSize = 16.0.w;
+  static final trigarLargeBtnWidth = 320.0.w;
 
-//   static const double iconMd = 24.8;
-//   static const double iconLg = 32.0;
+  static TextStyle displayTitleLarge = TextStyle(
+    color: KColors.txtColor,
+    fontSize: 32.w,
+    fontWeight: FontWeight.bold,
+  );
+  static TextStyle displayTitleMedium = TextStyle(
+    color: KColors.txtColor,
+    fontSize: 20.w,
+    fontWeight: FontWeight.bold,
+  );
 
-// // Font sizes
-//   static const double fontSizeSm = 14.0;
-//   static const double fontSizeMd = 16.0;
-//   static const double fontSizeLg = 18.0;
-// // Button sizes
-//   static const double buttonHeight = 18.8;
-//   static const double buttonRadius = 12.0;
-//   static const double buttonWidth = 120.0;
+  static TextStyle displayTitleSmall = TextStyle(
+    color: KColors.txtColor,
+    fontSize: 16.w,
+    fontWeight: FontWeight.bold,
+  );
 
-//   static const double buttonElevation = 4.0;
-// // AppBar height
-//   static const double appBarHeight = 56.0;
-// // Image sizes
-//   static const double imageThumbSize = 80.0;
+  static TextStyle categoryTextStyle15M = TextStyle(
+    color: Color(0xFFFFFFFF),
+    fontSize: 15.w,
+    fontWeight: FontWeight.w400,
+  );
+  static TextStyle dayNumber14M = TextStyle(
+    color: Colors.white,
+    fontSize: 14.w,
+    fontWeight: FontWeight.w400,
+  );
+  static TextStyle dayName15M = TextStyle(
+    color: Color(0xFFFFFFFF),
+    fontSize: 12.w,
+    fontWeight: FontWeight.w400,
+  );
 
-// // Default spacing between sections
-//   static const double defaultSpace = 24.0;
-//   static const double spaceBtwItems = 16.0;
-//   static const double spaceBtwSections = 32.0;
+  static TextStyle categoryTextStyle14M = TextStyle(
+    color: KColors.txtColor,
+    fontSize: 14.w,
+    fontWeight: FontWeight.w400,
+  );
 
-// // Border radius
-//   static const double borderRadiusSm = 4.0;
-//   static const double borderRadiusMd = 8.0;
-//   static const double borderRadiusLg = 12.0;
+  static TextStyle descriptionLarge = TextStyle(
+    color: KColors.txtColor,
+    fontSize: 18.w,
+    fontWeight: FontWeight.normal,
+  );
+  static TextStyle descriptionMedium = TextStyle(
+    color: Color(0xFFFFFFFF),
+    fontSize: 16.w,
+    fontWeight: FontWeight.normal,
+  );
+  static TextStyle deleteBtnMedium = TextStyle(
+    color: Colors.red,
+    fontSize: 16.w,
+    fontWeight: FontWeight.normal,
+  );
+  static TextStyle description2Medium = TextStyle(
+    color: KColors.hintTxtColor,
+    fontSize: 16.w,
+    fontWeight: FontWeight.normal,
+  );
 
-// // Divider height
-//   static const double dividerHeight = 1.0;
+  static TextStyle descriptionHintTextLarge = TextStyle(
+    color: KColors.hintTxtColor,
+    fontSize: 18.w,
+    fontWeight: FontWeight.normal,
+  );
+  static TextStyle descriptionHintTextMedium = TextStyle(
+    color: KColors.hintTxtColor,
+    fontSize: 12.w,
+    fontWeight: FontWeight.normal,
+  );
+  static TextStyle dateTimeTextStyle14N = TextStyle(
+    color: KColors.hintTxtColor,
+    fontSize: 14.w,
+    fontWeight: FontWeight.normal,
+  );
+  static TextStyle Month14N = TextStyle(
+    color: KColors.txtColor,
+    fontSize: 14.w,
+    fontWeight: FontWeight.normal,
+  );
 
-// // Product item dimensions
-//   static const double productImageSize = 120.0;
-//   static const double productImageRadius = 16.0;
-//   static const double productItemHeight = 168.8;
-// // Input field
-//   static const double inputFieldRadius = 12.0;
-//   static const double spaceBtwInputFields = 16.0;
-// // Card sizes
-//   static const double cordRadiusLg = 16.0;
-//   static const double cardRadiusMd = 12.0;
-//   static const double cordRadiusSm = 18.0;
-//   static const double cardRadiusXs = 6.0;
-//   static const double cardElevation = 2.8;
-// // Image carousel height
-//   static const double imageCarouselHeight = 200.0;
-// // Loading indicator size
-//   static const double loadingIndicatorSize = 36.0;
-// // Grid view spacing
-//   static const double gridViewSpacing = 16.0;
+  static TextStyle descriptionTextMedium = TextStyle(
+    color: KColors.txtColor,
+    fontSize: 12.w,
+    fontWeight: FontWeight.normal,
+  );
+  static TextStyle year10N = TextStyle(
+    color: KColors.hintTxtColor,
+    fontSize: 12.w,
+    fontWeight: FontWeight.normal,
+  );
+  // .....
+
+  static TextStyle profileTitleStyle = TextStyle(
+    color: Color(0xFFFFFFFF),
+    fontSize: 20.w,
+    fontWeight: FontWeight.normal,
+  );
+  static TextStyle profileNameStyle = TextStyle(
+    color: Color(0xFFFFFFFF),
+    fontSize: 20.w,
+    fontWeight: FontWeight.w500,
+  );
+  static TextStyle profileLabelStyle = TextStyle(
+    color: Color(0xFFAFAFAF),
+    fontSize: 14.w,
+    fontWeight: FontWeight.normal,
+  );
+  static TextStyle profileOptionStyleAndBtnText = TextStyle(
+    color: Color(0xFFFFFFFF),
+    fontSize: 16.w,
+    fontWeight: FontWeight.normal,
+  );
+
+  // .....Timer Coundown
+
+  static TextStyle timerTextStyle = TextStyle(
+    color: Color(0xFFFFFFFF),
+    fontSize: 40.w,
+    fontWeight: FontWeight.w500,
+  );
+
+  static TextStyle dialogeText18Medium = TextStyle(
+    color: Color(0xFFFFFFFF),
+    fontSize: 18.w,
+    fontWeight: FontWeight.w500,
+  );
+}
+
+class KColors {
+  // static const backGround = Color(0x000000);
+  static const backGround = Color(0xFF121212);
+  static const btn = Color(0xFF8687E7);
+  static const txtColor = Colors.white;
+  static const sendIconColor = Colors.purple;
+  // static const hintTxtColor = Color(0xFF535353);
+  static const hintTxtColor = Color(0xFFAFAFAF);
+  static const bottomSheetColor = Color(0xFF363636);
+  // static const bottomSheetColor = Color(0xFF363636);
+  static const dividerColor = Color(0xFF979797);
+  static const taskboxColor = Color(0xFF272727);
+  static const inerTextFieldColor = Color(0xFF1D1D1D);
+  static const timerFillRingColor = Color(0xFF8687E7);
 }

@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:vendoora_mart/features/user/home/domain/model/order/order_conform_model.dart';
+import 'package:vendoora_mart/features/user/order/screen/compaint/complaint_screen.dart';
 import 'package:vendoora_mart/helper/firebase_helper/firebase_helper.dart';
+import 'package:vendoora_mart/helper/helper_functions.dart';
 import 'package:vendoora_mart/utiles/constants/colors.dart';
 
 class UserOrderDetailsPage extends StatefulWidget {
@@ -53,8 +56,61 @@ class _UserOrderDetailsPageState extends State<UserOrderDetailsPage> {
                 _buildOrderSummary(orderDate),
                 const SizedBox(height: 20),
                 ...vendorOrders.map(_buildVendorSection).toList(),
+                const SizedBox(height: 80), // space for buttons at bottom
               ],
             ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            Expanded(
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  // TODO: Navigate to complaint screen
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text('Complaint feature coming soon!')),
+                  );
+                  HelperFunctions.navigateToScreen(
+                      context: context,
+                      screen: NewComplaintScreen(
+                          userId: FirebaseAuth.instance.currentUser!.uid));
+                },
+                icon: const Icon(Icons.report_problem),
+                label: const Text('Complaint'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.redAccent,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  // TODO: Navigate to review screen
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text('Review feature coming soon!')),
+                  );
+                },
+                icon: const Icon(Icons.reviews),
+                label: const Text('Review'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueAccent,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -210,6 +266,7 @@ class _UserOrderDetailsPageState extends State<UserOrderDetailsPage> {
               overflow: TextOverflow.ellipsis,
             ),
           ),
+          // Two Buttons
         ],
       ),
     );

@@ -86,7 +86,7 @@ class _AnimatedAdminDashboardState extends State<AnimatedAdminDashboard>
                           BottomNavigationBarItem(
                               icon: Icon(Icons.dashboard), label: 'Dashboard'),
                           BottomNavigationBarItem(
-                              icon: Icon(Icons.list_alt), label: 'Orders'),
+                              icon: Icon(Icons.list_alt), label: 'Complaints'),
                           BottomNavigationBarItem(
                               icon: Icon(Icons.store), label: 'Vendors'),
                           BottomNavigationBarItem(

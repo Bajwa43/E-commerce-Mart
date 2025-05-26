@@ -81,14 +81,17 @@ class CartCardWidget extends StatelessWidget {
                   ),
 
                   // Delete icon
-                  InkWell(
-                    onTap: onDelete,
-                    child: Padding(
-                      padding: EdgeInsets.all(8.r),
-                      child: SizedBox(
-                        width: 24.w,
-                        height: 24.h,
-                        child: Image.asset(TImageString.deleteBasket),
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: InkWell(
+                      onTap: onDelete,
+                      child: Padding(
+                        padding: EdgeInsets.all(12.r),
+                        child: SizedBox(
+                          width: 24.w,
+                          height: 24.h,
+                          child: Image.asset(TImageString.deleteBasket),
+                        ),
                       ),
                     ),
                   ),

@@ -2,6 +2,7 @@ class TImageString {
   TImageString._();
 
   static String greyShoeImage = 'assets/images/greyShoe.jpeg';
+  static String mart = 'assets/images/mart.png';
   static String myImage = 'assets/images/my.jpg';
   static String cartIcon = 'assets/images/Frame.png';
   static String deleteBasket = 'assets/images/deleteBasket.png';

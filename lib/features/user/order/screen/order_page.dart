@@ -106,6 +106,7 @@ class _OrdersPageState extends State<OrdersPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     // Get.put(HomeController()); // Register  Controller
   }
 
@@ -133,7 +134,6 @@ class _OrdersPageState extends State<OrdersPage> {
                     child: Text('No orders available.'),
                   );
                 }
-
                 return ListView.builder(
                   itemCount: list.length,
                   itemBuilder: (context, index) {

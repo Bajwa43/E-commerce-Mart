@@ -181,15 +181,21 @@ class _ProductCartPageState extends State<ProductCartPage> {
                     width: width,
                     height: height * 0.6,
                     child: ClipRRect(
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(20.sp),
-                        bottomRight: Radius.circular(20.sp),
-                      ),
-                      child: Image.network(
-                        widget.product.images.last,
-                        fit: BoxFit.fill,
-                      ),
-                    ),
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(20.sp),
+                          bottomRight: Radius.circular(20.sp),
+                        ),
+                        child: Image.network(
+                          widget.product.images.isNotEmpty &&
+                                  widget.product.images.last != null
+                              ? widget.product.images.last
+                              : 'https://', // dummy string to prevent crash, won't be used
+                          fit: BoxFit.fill,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Icon(Icons.image_not_supported,
+                                size: 150.sp);
+                          },
+                        )),
                   ),
                   Padding(
                     padding: EdgeInsets.all(40.w),

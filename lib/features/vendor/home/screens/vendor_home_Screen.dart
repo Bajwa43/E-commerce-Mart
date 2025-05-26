@@ -2,6 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:vendoora_mart/features/auth/auth_wraper.dart';
+import 'package:vendoora_mart/features/user/home/controller/home_controller.dart';
+import 'package:vendoora_mart/features/user/home/controller/product_cart_controller.dart';
 // import 'package:google_fonts/google_fonts.dart';
 import 'package:vendoora_mart/features/vendor/add_Product/vender_add_item_screen.dart';
 import 'package:vendoora_mart/features/vendor/controller/vender_controller.dart';
@@ -18,10 +21,11 @@ class VendorHomeScreen extends StatefulWidget {
 }
 
 class _VendorHomeScreenState extends State<VendorHomeScreen> {
+  late VendorOrderController controller;
   @override
   void initState() {
     super.initState();
-    Get.put(VendorOrderController()); // Register Controller
+    controller = Get.put(VendorOrderController()); // Register Controller
   }
 
   @override
@@ -120,16 +124,25 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
                 _buildVendorCategoryBtn(
                   icon: Icons.checkroom,
                   label: 'Fashion',
-                  onTap: () => HelperFunctions.navigateToScreen(
-                    context: context,
-                    screen: VendorDashboardScreen(),
-                  ),
+                  onTap: () {
+                    // controller.typeOfProduct.value = 'fashion';
+                    HelperFunctions.navigateToScreen(
+                      context: context,
+                      screen: VendorDashboardScreen(),
+                    );
+                  },
                 ),
                 const SizedBox(height: 16),
                 _buildVendorCategoryBtn(
                   icon: Icons.directions_car,
-                  label: 'Cars',
-                  onTap: () {},
+                  label: 'Electronics',
+                  onTap: () {
+                    // controller.typeOfProduct.value = 'electronics';
+                    HelperFunctions.navigateToScreen(
+                      context: context,
+                      screen: VendorDashboardScreen(),
+                    );
+                  },
                 ),
                 const SizedBox(height: 16),
                 _buildVendorCategoryBtn(
@@ -139,8 +152,23 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
                 ),
                 const Spacer(),
                 ElevatedButton.icon(
-                  onPressed: () {
-                    FirebaseAuth.instance.signOut();
+                  onPressed: () async {
+                    try {
+                      // Sign out user
+                      await FirebaseAuth.instance.signOut();
+
+                      // Reset GetX controller to avoid keeping previous user state
+                      Get.delete<VendorOrderController>(); // dispose controller
+                      // Get.delete<ProductCartController>();
+                      Get.delete<HomeController>(); // dispose controller
+                      Get.delete<ProductCartController>();
+
+                      // Navigate to login/auth screen
+                      HelperFunctions.navigateToScreen(
+                          context: context, screen: AuthWrapper());
+                    } catch (e) {
+                      HelperFunctions.showToast('Network Issue');
+                    }
                   },
                   icon: const Icon(Icons.logout),
                   label: const Text('Logout'),

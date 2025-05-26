@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:vendoora_mart/features/admin/controller/admin_controller.dart';
+import 'package:vendoora_mart/features/auth/auth_wraper.dart';
 import 'package:vendoora_mart/features/auth/domain/models/user_model.dart';
 import 'package:vendoora_mart/features/auth/screens/loginScreen.dart';
 import 'package:vendoora_mart/features/user/home/controller/home_controller.dart';
 import 'package:vendoora_mart/features/user/home/controller/product_cart_controller.dart';
 import 'package:vendoora_mart/features/user/profile/widget/profile_containers_widget.dart';
+import 'package:vendoora_mart/features/vendor/controller/vender_controller.dart';
 import 'package:vendoora_mart/helper/firebase_helper/firebase_helper.dart';
 import 'package:vendoora_mart/helper/helper_functions.dart';
 import 'package:vendoora_mart/services/auth_service.dart';
@@ -15,6 +18,16 @@ import 'package:vendoora_mart/utiles/constants/colors.dart';
 import 'package:vendoora_mart/utiles/constants/image_string.dart';
 import 'package:vendoora_mart/utiles/constants/sizes.dart';
 import 'package:vendoora_mart/utiles/constants/txt_theme.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:get/route_manager.dart';
+import 'package:vendoora_mart/features/auth/screens/dayn_night_animate.dart';
+import 'package:vendoora_mart/features/user/profile/screen/widgets/address_screen.dart';
+import 'package:vendoora_mart/features/user/profile/screen/widgets/edit_profile_screen.dart';
+import 'package:vendoora_mart/helper/firebase_helper/firebase_helper.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -85,6 +98,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   color: TColors.labelName,
                 ),
                 title: 'Person',
+                onTap: () {
+                  return HelperFunctions.navigateToScreen(
+                      context: context, screen: EditProfileScreen());
+                },
               ),
               ProfileConatainerWidget(
                 icon: Icon(
@@ -93,6 +110,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   color: TColors.labelName,
                 ),
                 title: 'Setting',
+                onTap: () {
+                  HelperFunctions.navigateToScreen(
+                      context: context, screen: AddressScreen());
+                },
               ),
               ProfileConatainerWidget(
                 icon: Icon(
@@ -124,13 +145,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 30.h),
                 child: TextButton(
-                    onPressed: () {
+                    onPressed: () async {
                       try {
-                        FirebaseAuth.instance.signOut();
-                        // AuthService.logOut(context);
-                        // HelperFunctions.navigateToScreen(
-                        //     context: context, screen: LoginScreen());
-                        // homeController.imageUrl.value = '';
+                        // Sign out user
+                        await FirebaseAuth.instance.signOut();
+
+                        // Reset GetX controller to avoid keeping previous user state
+                        Get.delete<HomeController>(); // dispose controller
+                        Get.delete<ProductCartController>();
+                        Get.delete<VendorOrderController>();
+                        Get.delete<AdminNavController>();
+
+                        // Navigate to login/auth screen
+                        HelperFunctions.navigateToScreen(
+                            context: context, screen: AuthWrapper());
                       } catch (e) {
                         HelperFunctions.showToast('Network Issue');
                       }
@@ -147,3 +175,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
+
+//
+

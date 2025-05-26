@@ -74,76 +74,84 @@ class RegisterController extends GetxController {
     if (formKey.currentState!.validate()) {
       UserType userType = isVendor ? UserType.vendor : UserType.customer;
 
-      UserModel user = UserModel(
-          imageUrl: !isVendor
-              ? profileImage.value!.path
-              : vendorLogo.value!.path, // Handle image upload if needed
-          fullName: isVendor ? null : fullnameController.text,
-          email: emailController.text,
-          password: passwordController.text,
-          phone: phoneController.text,
-          business: isVendor ? businessNameController.text : null,
-          address: addressController.text,
-          city: cityController.text,
-          gstNumber: isVendor ? gstNumberController.text : null,
-          textRegistered: isVendor ? selectedTax : null,
-          userType: userType.value,
-          approved: isVendor ? false : null,
-          shopImageUrl: isVendor ? vendorImage.value!.path : '',
-          userId: isVendor ? vendorLogo.value!.path : '');
+      try {
+        UserModel user = UserModel(
+            imageUrl: !isVendor
+                ? profileImage.value!.path
+                : vendorLogo.value!.path, // Handle image upload if needed
+            fullName: isVendor ? null : fullnameController.text,
+            email: emailController.text,
+            password: passwordController.text,
+            phone: phoneController.text,
+            business: isVendor ? businessNameController.text : null,
+            address: addressController.text,
+            city: cityController.text,
+            gstNumber: isVendor ? gstNumberController.text : null,
+            textRegistered: isVendor ? selectedTax : null,
+            userType: userType.value,
+            approved: isVendor ? false : null,
+            shopImageUrl: isVendor ? vendorImage.value!.path : '',
+            userId: isVendor ? vendorLogo.value!.path : '');
 
-      UserCredential userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-              email: emailController.text, password: passwordController.text);
+        UserCredential userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+                email: emailController.text, password: passwordController.text);
 
-      // String imageUrl = '';
-      if (!isVendor) {
-        if (profileImage.value != null) {
-          user.imageUrl = await AuthService.uploadImageToStorage(
-              profileImage.value,
-              userCredential.user!.uid,
-              TTextString.profileImage);
+        // String imageUrl = '';
+        if (!isVendor) {
+          if (profileImage.value != null) {
+            print(">>>>>>>>>>>>>IMAGE>>>>>>>>>>>>>>>>${profileImage.value}");
+            // var i;
+            user.imageUrl = await AuthService.uploadImageToStorage(
+                profileImage.value,
+                userCredential.user!.uid,
+                TTextString.profileImage);
+
+            print("Uploaded image URL: ${user.imageUrl}");
+          } else {
+            HelperFunctions.showToast('Image not selected');
+          }
+
+          // // Clear form fields after registration
+          // fullnameController.clear();
+          // emailController.clear();
+          // phoneController.clear();
+          // passwordController.clear();
+        } else if (isVendor) {
+          if (vendorImage.value != null && vendorLogo.value != null) {
+            user.shopImageUrl = await AuthService.uploadImageToStorage(
+                vendorImage.value,
+                userCredential.user!.uid,
+                TTextString.vendorShopImage);
+            user.logoUrl = await AuthService.uploadImageToStorage(
+                vendorLogo.value,
+                userCredential.user!.uid,
+                TTextString.vendorShopLogo);
+          } else {
+            HelperFunctions.showToast('Images And Logo not selected');
+          }
+
+          // // Clear form fields after registration
+          // fullnameController.clear();
+          // emailController.clear();
+          // phoneController.clear();
+          // passwordController.clear();
         } else {
-          HelperFunctions.showToast('Image not selected');
+          HelperFunctions.showToast('Error while uploading Image To Storage.');
         }
 
-        // // Clear form fields after registration
-        // fullnameController.clear();
-        // emailController.clear();
-        // phoneController.clear();
-        // passwordController.clear();
-      } else if (isVendor) {
-        if (vendorImage.value != null && vendorLogo.value != null) {
-          user.shopImageUrl = await AuthService.uploadImageToStorage(
-              vendorImage.value,
-              userCredential.user!.uid,
-              TTextString.vendorShopImage);
-          user.logoUrl = await AuthService.uploadImageToStorage(
-              vendorLogo.value,
-              userCredential.user!.uid,
-              TTextString.vendorShopLogo);
-        } else {
-          HelperFunctions.showToast('Images And Logo not selected');
-        }
-
-        // // Clear form fields after registration
-        // fullnameController.clear();
-        // emailController.clear();
-        // phoneController.clear();
-        // passwordController.clear();
-      } else {
-        HelperFunctions.showToast('Error while uploading Image To Storage.');
+        String? userCredentual = await AuthService.registerUserWithFirebaseAuth(
+          context,
+          emailController,
+          fullnameController,
+          phoneController,
+          passwordController,
+          userCredential,
+          user,
+        );
+      } catch (e) {
+        HelperFunctions.showToast(e.toString());
       }
-
-      String? userCredentual = await AuthService.registerUserWithFirebaseAuth(
-        context,
-        emailController,
-        fullnameController,
-        phoneController,
-        passwordController,
-        userCredential,
-        user,
-      );
     }
   }
 }

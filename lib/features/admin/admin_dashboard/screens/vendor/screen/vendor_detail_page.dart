@@ -44,12 +44,21 @@ class VendorDetailPage extends StatelessWidget {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(24),
-                    child: vendor.shopImageUrl != null
+                    child: (vendor.shopImageUrl != null &&
+                            vendor.shopImageUrl!.isNotEmpty)
                         ? Image.network(
                             vendor.shopImageUrl!,
                             height: 180,
                             width: double.infinity,
                             fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Image.asset(
+                                TImageString.greyShoeImage,
+                                height: 180,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                              );
+                            },
                           )
                         : Image.asset(
                             TImageString.greyShoeImage,

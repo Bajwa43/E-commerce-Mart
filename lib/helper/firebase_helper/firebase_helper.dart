@@ -27,15 +27,17 @@ class HelperFirebase {
 
   // static
 
-  static var orderProductsInstance = HelperFirebase.orderConformInstance.where(
-      'userID',
-      isEqualTo: FirebaseAuth.instance.currentUser!.uid.toString());
+  static var orderProductsInstance = HelperFirebase.orderConformInstance
+      .where('userID', isEqualTo: FirebaseAuth.instance.currentUser!.uid);
 
   static var userInstance =
       FirebaseFirestore.instance.collection('VenderUsers');
 
+  static var compaintsInstance =
+      FirebaseFirestore.instance.collection('complaints');
+
   static var addToCartInstance = HelperFirebase.userInstance
-      .doc(homeController.firebaseUser.value?.uid.toString())
+      .doc(FirebaseAuth.instance.currentUser!.uid)
       // .doc()
       .collection('Carted');
   static var productInstance =

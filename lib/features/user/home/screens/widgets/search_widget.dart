@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../../../utiles/constants/sizes.dart';
+import 'package:vendoora_mart/utiles/constants/sizes.dart';
 
 class SearchInput extends StatelessWidget {
   final TextEditingController textController;
   final String hintText;
-  const SearchInput(
-      {required this.textController, required this.hintText, super.key});
+  final void Function(String)? onSubmitted; // 🔥 Add this line
+
+  const SearchInput({
+    super.key,
+    required this.textController,
+    required this.hintText,
+    this.onSubmitted, // 🔥 Add this line
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,18 +20,23 @@ class SearchInput extends StatelessWidget {
       padding: EdgeInsets.only(top: 48.h),
       child: Container(
         height: TSizes.searchHomeFirldH,
-        decoration: BoxDecoration(boxShadow: [
-          BoxShadow(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
               offset: const Offset(12, 26),
               blurRadius: 50,
               spreadRadius: 0,
-              color: Colors.grey.withOpacity(.1)),
-        ]),
+              color: Colors.grey.withOpacity(.1),
+            ),
+          ],
+        ),
         child: TextField(
+          style: TextStyle(color: Colors.black),
           controller: textController,
           onChanged: (value) {
-            //Do something wi
+            // Optional: Live filtering
           },
+          onSubmitted: onSubmitted, // 🔥 Use the submitted callback
           decoration: InputDecoration(
             prefixIcon: const Icon(
               Icons.search,

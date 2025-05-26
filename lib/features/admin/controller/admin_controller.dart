@@ -12,6 +12,7 @@ import 'package:vendoora_mart/features/admin/admin_dashboard/screens/product/pro
 import 'package:vendoora_mart/features/admin/admin_dashboard/screens/vendor/vendor.dart';
 import 'package:vendoora_mart/features/auth/domain/models/user_model.dart';
 import 'package:vendoora_mart/features/user/home/domain/model/order/order_conform_model.dart';
+import 'package:vendoora_mart/features/user/order/domain/model/complaint_model.dart';
 import 'package:vendoora_mart/features/vendor/controller/vender_controller.dart';
 import 'package:vendoora_mart/features/vendor/domain/models/product_model.dart';
 import 'package:vendoora_mart/helper/enum.dart';
@@ -27,6 +28,8 @@ class AdminNavController extends GetxController {
   RxBool isSidebarOpen = false.obs;
   RxList<OrderConformModel> _listOfOrderProducts = <OrderConformModel>[].obs;
   List<OrderConformModel> get listOfOrderProducts => _listOfOrderProducts;
+  // RxList<ComplaintModel> _listOfOrderComplaints = <ComplaintModel>[].obs;
+  // List<ComplaintModel> get listOfOrderComplaints => _listOfOrderComplaints;
   RxList<ProductModel> _listOfProducts = <ProductModel>[].obs;
   List<ProductModel> get listOfProducts => _listOfProducts;
   RxList<UserModel> _listOfVendors = <UserModel>[].obs;
@@ -45,6 +48,7 @@ class AdminNavController extends GetxController {
     _listOfOrderProducts.bindStream(getOrderProducts());
     _listOfProducts.bindStream(getProducts());
     _listOfVendors.bindStream(getVendors());
+    // _listOfOrderComplaints.bindStream(getComplaints());
     // adminTotalEarning.value = getTotalEarnings();
     ever<List<OrderConformModel>>(_listOfOrderProducts, (_) {
       getTotalEarnings();
@@ -204,6 +208,12 @@ class AdminNavController extends GetxController {
     });
   }
 
+  Stream<List<ComplaintModel>> getComplaints() {
+    return HelperFirebase.compaintsInstance.snapshots().map((event) {
+      return event.docs.map((e) => ComplaintModel.fromMap(e.data())).toList();
+    });
+  }
+
   Stream<List<UserModel>> getVendors() {
     return HelperFirebase.userInstance
         .where('userType', isEqualTo: UserType.vendor.value)
@@ -275,7 +285,7 @@ class AdminNavController extends GetxController {
   ];
   final pages = [
     AdminDashboardPage(),
-    AdminOrdersPage(),
+    AdminCompaintsPage(),
     AdminVendorsPage(),
     AdminProductsPage()
   ];

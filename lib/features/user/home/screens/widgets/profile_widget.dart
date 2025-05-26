@@ -4,6 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:vendoora_mart/features/user/home/controller/home_controller.dart';
+// import 'package:vendoora_mart/features/user/home/screens/widgets/drawer.dart';
+import 'package:vendoora_mart/helper/helper_functions.dart';
+import 'package:vendoora_mart/utiles/constants/colors.dart';
 import 'package:vendoora_mart/utiles/constants/image_string.dart';
 import 'package:vendoora_mart/utiles/constants/sizes.dart';
 
@@ -20,57 +23,56 @@ class ProfileWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(30.sp),
+          Material(
+            elevation: 4,
+            color: Colors.grey,
+            shape: const CircleBorder(),
             child: Obx(() {
               final user = contr.currentUserModel.value;
-
-              print('>>>>> >>  $user');
-
-              if (user == null) {
-                return const CircularProgressIndicator(); // or a placeholder
-              }
-
+              if (user == null) return const CircularProgressIndicator();
               final imageUrl = user.imageUrl ?? '';
-
               return Container(
                 width: TSizes.profilePictureW,
                 height: TSizes.profilePictureH,
                 child: imageUrl.isNotEmpty
-                    ? Image.network(
-                        imageUrl,
+                    ? Image.network(imageUrl,
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Image.asset(
-                              TImageString.person); // fallback on error
-                        },
-                      )
+                        errorBuilder: (_, __, ___) =>
+                            Image.asset(TImageString.person))
                     : Image.asset(TImageString.person),
               );
+              // return IconButton(
+              //   icon: const Icon(Icons.menu, color: Colors.white),
+              //   onPressed: () {
+              //     // TODO: Implement menu action (drawer, dialog, etc.)
+              //     HelperFunctions.navigateToScreen(
+              //         context: context, screen: DemoMWDrawerScreen5());
+              //     Get.snackbar("Menu", "Menu button clicked!",
+              //         snackPosition: SnackPosition.TOP);
+              //   },
+              // );
             }),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'hello!',
-                style: TextStyle(fontSize: TSizes.headingSmallS),
-              ),
-              Text(
-                FirebaseAuth.instance.currentUser?.email.toString() ??
-                    'No emial',
-                style: TextStyle(fontSize: TSizes.headingMediumS),
-              ),
-            ],
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Hello 👋',
+                    style: TextStyle(
+                        fontSize: TSizes.headingSmallS,
+                        fontWeight: FontWeight.w600)),
+                Text(
+                  FirebaseAuth.instance.currentUser?.email ?? 'No email',
+                  style: TextStyle(
+                      fontSize: TSizes.headingMediumS, color: Colors.grey[600]),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
           ),
-          SizedBox(
-              width: TSizes.profileIconContainer,
-              height: TSizes.iconContainerH,
-              child: Icon(
-                Icons.add_alert_sharp,
-                size: TSizes.profileIcon,
-              ))
+          Icon(Icons.notifications_active_outlined,
+              size: TSizes.profileIcon, color: TColors.IconColor),
         ],
       ),
     );

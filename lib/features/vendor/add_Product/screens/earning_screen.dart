@@ -3,6 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/get_instance.dart';
+import 'package:vendoora_mart/features/auth/auth_wraper.dart';
+import 'package:vendoora_mart/features/user/home/controller/home_controller.dart';
+import 'package:vendoora_mart/features/user/home/controller/product_cart_controller.dart';
 import 'package:vendoora_mart/features/vendor/controller/vender_controller.dart';
 import 'package:vendoora_mart/features/vendor/widgets/earning_container_widget.dart';
 import 'package:vendoora_mart/helper/helper_functions.dart';
@@ -49,7 +52,22 @@ class _EarningScreenState extends State<EarningScreen> {
               label: 'TOTAL ORDERS', value: widget.totalOrders.toString()),
           ElevatedButton(
               onPressed: () async {
-                AuthService.logOut(context);
+                try {
+                  // Sign out user
+                  await FirebaseAuth.instance.signOut();
+
+                  // Reset GetX controller to avoid keeping previous user state
+                  Get.delete<VendorOrderController>(); // dispose controller
+                  // Get.delete<ProductCartController>();
+                  Get.delete<HomeController>(); // dispose controller
+                  Get.delete<ProductCartController>();
+
+                  // Navigate to login/auth screen
+                  HelperFunctions.navigateToScreen(
+                      context: context, screen: AuthWrapper());
+                } catch (e) {
+                  HelperFunctions.showToast('Network Issue');
+                }
               },
               child: const Text('Logout'))
         ],

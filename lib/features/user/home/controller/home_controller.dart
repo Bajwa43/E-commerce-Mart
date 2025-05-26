@@ -80,7 +80,7 @@ class HomeController extends GetxController {
   }
 
   void addToCart(BuildContext context, ProductModel product) async {
-    final userId = FirebaseAuth.instance.currentUser!.uid;
+    // final userId = FirebaseAuth.instance.currentUser!.uid;
     final cartRef = HelperFirebase.addToCartInstance;
 
     // 1️⃣ First look for an existing cart item with same productId (and size):
@@ -168,7 +168,7 @@ class HomeController extends GetxController {
   void loadFavorites() async {
     if (firebaseUser.value == null) return;
     var snapshot = await HelperFirebase.userInstance
-        .doc(firebaseUser.value!.uid)
+        .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection('wishlist')
         .get();
     for (var doc in snapshot.docs) {
@@ -182,7 +182,7 @@ class HomeController extends GetxController {
   Future<void> onToggalFavt(String productId) async {
     if (firebaseUser.value == null) return;
     final wishlistRef = HelperFirebase.userInstance
-        .doc(firebaseUser.value!.uid)
+        .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection('wishlist')
         .doc(productId);
     if (favoriteProducts.containsKey(productId)) {
@@ -199,18 +199,17 @@ class HomeController extends GetxController {
 
   /// 📦 **Get List of Products**
   Stream<List<OrderConformModel>> getOrderProducts() {
-    print('getOrderProducts');
-    return HelperFirebase.orderProductsInstance
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return Stream.value([]); // safety check
+
+    return HelperFirebase.orderConformInstance
+        .where('userID', isEqualTo: user.uid) // 🔥 filter by user
         .orderBy('orderDate', descending: true)
         .snapshots()
         .map((event) {
-      print('getOrderProducts event: ${event.docs.length}');
-      var list;
-
-      list =
-          event.docs.map((e) => OrderConformModel.fromMap(e.data())).toList();
-      print('LIST>> ${list.length}');
-      return list;
+      return event.docs
+          .map((e) => OrderConformModel.fromMap(e.data()))
+          .toList();
     });
   }
 

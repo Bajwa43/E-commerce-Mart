@@ -7,20 +7,20 @@ import 'package:get/get_state_manager/src/simple/list_notifier.dart';
 import 'package:vendoora_mart/features/auth/screens/loginScreen.dart';
 import 'package:vendoora_mart/features/user/home/controller/home_controller.dart';
 import 'package:vendoora_mart/features/user/home/controller/product_cart_controller.dart';
+import 'package:vendoora_mart/features/user/home/screens/favourite/favourite_screen.dart';
 import 'package:vendoora_mart/features/user/home/screens/widgets/ads_scroller_widget.dart';
+import 'package:vendoora_mart/features/user/home/screens/widgets/home_banner_fullscreen_widget.dart';
 import 'package:vendoora_mart/features/user/home/screens/widgets/product_list_widget.dart';
+import 'package:vendoora_mart/features/user/home/screens/widgets/search_result_screen.dart';
 import 'package:vendoora_mart/features/user/home/screens/widgets/search_widget.dart';
 import 'package:vendoora_mart/features/user/order/screen/order_page.dart';
 import 'package:vendoora_mart/features/user/profile/screen/profile_screen.dart';
-import 'package:vendoora_mart/features/vendor/controller/product_controller.dart';
-import 'package:vendoora_mart/helper/firebase_helper/firebase_helper.dart';
-import 'package:vendoora_mart/helper/helper_functions.dart';
-import 'package:vendoora_mart/services/auth_service.dart';
+
 import 'package:vendoora_mart/utiles/constants/colors.dart';
+import 'package:vendoora_mart/utiles/constants/image_string.dart';
 import 'package:vendoora_mart/utiles/constants/sizes.dart';
 import 'package:vendoora_mart/utiles/constants/text_string.dart';
 
-import '../../../auth/domain/models/user_model.dart';
 import 'widgets/profile_widget.dart';
 
 class UserHomeScreen extends StatefulWidget {
@@ -38,6 +38,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   @override
   void initState() {
     // TODO: implement initState
+    // Get.put(
+    //   HomeController(),
+    // );
     super.initState();
     searchController = TextEditingController();
     if (!Get.isRegistered<HomeController>()) {
@@ -51,8 +54,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     if (!Get.isRegistered<ProductCartController>()) {
       Get.put(ProductCartController());
     }
-    // _loadImage();
-    // print('>>>>>>>>>>>>>>>>>>>>>>>>>>$url');
   }
 
   @override
@@ -60,14 +61,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     searchController.dispose();
     super.dispose();
   }
-
-// OLD WAY OF GET IMAGE BY FIRESTORE STORE REAL IMAGE
-  // Future<void> _loadImage() async {
-  //   HomeController contro = Get.find();
-  //   String url = await AuthService.getImageUrl(
-  //       '${TTextString.profileImage}/${FirebaseAuth.instance.currentUser!.uid}.jpg');
-  //   contro.imageUrl.value = url;
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -83,8 +76,29 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                 children: [
                   ProfileWidget(),
                   SearchInput(
-                      textController: searchController, hintText: 'Search'),
-                  AdsCrouselSliderWidget(),
+                    textController: searchController,
+                    hintText: 'Search',
+                    onSubmitted: (query) {
+                      if (query.trim().isNotEmpty) {
+                        Get.to(() => SearchResultScreen(query: query));
+                      }
+                    },
+                  ),
+
+                  /// 🚀 Full screen banner carousel
+                  HomeBannerFullScreenWidget(
+                    imageUrls: [
+                      TImageString.greyShoeImage,
+                      TImageString.person,
+                      TImageString.banner,
+                      // TImageString.greyShoeImage,
+                      // TTextString.vendorShopLogo,
+                      // TTextString.productImages,
+                      // 'https://via.placeholder.com/1080x400.png?text=Super+Sale+%F0%9F%92%B0',
+                      // 'https://via.placeholder.com/1080x400.png?text=Fashion+Fest+2025',
+                      // 'https://via.placeholder.com/1080x400.png?text=Flat+40%25+Off+on+Clothes',
+                    ],
+                  ),
                   ProductListWidget(lableName: TTextString.accessoriesCategory),
                   ProductListWidget(lableName: TTextString.clotheCategory),
                   ProductListWidget(lableName: TTextString.footwearCategory),
@@ -93,7 +107,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         ),
       ),
       const Center(
-          child: Text('Explore Screen', style: TextStyle(fontSize: 24))),
+        child: FavouriteProductsScreen(),
+      ),
       // const Center(
       //     child: Text('Explore Screen', style: TextStyle(fontSize: 24))),
       OrdersPage(),
@@ -111,7 +126,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         () => Center(
           child: homeScreens[homeController.currentIndexOfBottomAppBar
               .value], // Show screen based on the selected index
-        ),
+        ), ///////
       ),
       bottomNavigationBar: Obx(
         () => BottomNavigationBar(
@@ -129,7 +144,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                   label: 'home',
                   backgroundColor: Color(0xFF9E9E9E)),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.search), label: 'search'),
+                  icon: Icon(Icons.favorite_border), label: 'Favourite'),
               BottomNavigationBarItem(
                   icon: Icon(Icons.card_travel_rounded), label: 'cart'),
               BottomNavigationBarItem(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:vendoora_mart/features/vendor/add_Product/screens/edit_product/edit_Item/edit_item_screen.dart';
 import 'package:vendoora_mart/features/vendor/controller/product_controller.dart';
 import 'package:vendoora_mart/features/vendor/domain/models/product_model.dart';
@@ -122,8 +123,18 @@ class _ProductCartWidgetState extends State<ProductCartWidget> {
                                       // widget.product.images.first != null &&
                                       widget.product.images.first.isNotEmpty
                                   ? Image.network(
-                                      widget.product.images.first,
+                                      widget.product.images.isNotEmpty &&
+                                              widget.product.images.first
+                                                  .isNotEmpty
+                                          ? widget.product.images.first
+                                          : 'https://', // dummy string to trigger errorBuilder if list is empty
                                       fit: BoxFit.cover,
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                        return Icon(
+                                            Icons.image_not_supported_outlined,
+                                            size: 40.sp);
+                                      },
                                     )
                                   : const Icon(Icons.image_not_supported),
                         ),

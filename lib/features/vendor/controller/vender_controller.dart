@@ -149,6 +149,7 @@ class VendorOrderController extends GetxController {
   /// The list of orders relevant to *this* vendor
   final RxList<VendorOrderPreview> _orders = <VendorOrderPreview>[].obs;
   List<VendorOrderPreview> get orders => _orders;
+  RxString typeOfProduct = 'electronics'.obs;
 
   late final String vendorId;
 
@@ -160,9 +161,8 @@ class VendorOrderController extends GetxController {
   }
 
   void _bindOrdersStream() {
-    FirebaseFirestore.instance
-        .collection(
-            'OrderConform') // matches HelperFirebase.orderConformInstance
+    HelperFirebase
+        .orderConformInstance // matches HelperFirebase.orderConformInstance
         .orderBy('orderDate', descending: true)
         .snapshots()
         .asyncMap((snapshot) async {
@@ -171,8 +171,9 @@ class VendorOrderController extends GetxController {
         final model = OrderConformModel.fromMap(raw);
 
         // 1️⃣ Extract the slice for this vendor
-        final vendorSlices =
-            model.orderItemVendor.where((v) => v.venderID == vendorId).toList();
+        final vendorSlices = model.orderItemVendor
+            .where((v) => v.venderID == FirebaseAuth.instance.currentUser!.uid)
+            .toList();
         if (vendorSlices.isEmpty) return null;
         final mySlice = vendorSlices.first;
 

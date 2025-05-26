@@ -74,9 +74,6 @@ class AuthWrapper extends StatelessWidget {
                 Get.put(AdminNavController());
                 return AnimatedAdminDashboard();
               } else {
-                Get.put(
-                  HomeController(),
-                );
                 return const UserHomeScreen();
               }
             },

@@ -52,6 +52,7 @@ class _VendorDashboardScreenState extends State<VendorDashboardScreen> {
   @override
   Widget build(BuildContext context) {
     final VendorOrderController vController = Get.find<VendorOrderController>();
+
     int totalOrders = 0;
     double totalEarning = 0;
     for (var i = 0; i < vController.orders.length; i++) {
